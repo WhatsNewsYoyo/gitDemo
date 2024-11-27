@@ -41,10 +41,10 @@ int main() {
                 break;
             case 2:
                 cout << "Ingrese una categoría: ";
-                getline(cin, categoria); // Leer la categoría
+                cin >> categoria; // Leer la categoría
                 manager.addCategory(categoria);
                 cout << "Ingrese un objeto para agregar a la categoría '" << categoria << "': ";
-                getline(cin, objeto); // Leer el objeto
+                cin >> objeto; // Leer el objeto
                 // Agregar el objeto a la categoría
                 manager.addObjectToCategory(categoria, objeto);
                 return 0;
