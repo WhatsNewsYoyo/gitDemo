@@ -1,13 +1,8 @@
 #include "recommendation_system.hpp"
 
-
-int find_index(const std::vector<User*>& vec, User* element) {
-    auto it = std::find(vec.begin(), vec.end(), element);
-    if (it != vec.end()) {
-        return std::distance(vec.begin(), it);
-    }
-    return -1;
-
+RecommendationSystem::RecommendationSystem(UserManager* my_user_manager):
+_my_user_manager(my_user_manager){
+    update_system();
 }
 
 std::vector<std::string> RecommendationSystem::recommendContent(std::string user) {
@@ -22,7 +17,7 @@ std::vector<std::string> RecommendationSystem::recommendContent(std::string user
 
     for(int i = 0; i < _system[user_index].size(); i++){
         if (_system[user_index][i] != INT_MAX){
-            std::vector<std::string> this_interest_vector = _users[i] -> interests;
+            std::vector<std::string> this_interest_vector = _users[i].interests;
             final_interest_vec.insert(final_interest_vec.end(), this_interest_vector.begin(), this_interest_vector.end());
         }
     }
@@ -32,18 +27,13 @@ std::vector<std::string> RecommendationSystem::recommendContent(std::string user
 
 int RecommendationSystem::find_by_name(std::string name) {
     for (int i = 0; i < _users.size(); i++){
-        if(_users[i]->name == name) return i;
+        if(_users[i].name == name) return i;
     }
     return -1;
 }
 
-void RecommendationSystem::addUser(std::string new_user){
-    _users.push_back(new User(new_user));
-    update_system();
-}
-
-void RecommendationSystem::addFriend(std::string the_user, std::string his_friend){
-    _users[find_by_name(the_user)]->friendNames.push_back(his_friend);
+void RecommendationSystem::get_users_from_manager(){
+    _users = _my_user_manager -> get_users_vector();
     update_system();
 }
 
@@ -56,7 +46,7 @@ void RecommendationSystem::update_system(){
     _system = new_system;
 
     for(int i = 0; i < users_s; i++){
-        for(auto friendd : _users[i] -> friendNames){
+        for(auto friendd : _users[i].friendNames){
             _system[i][find_by_name(friendd)] = 1;
         }
     }

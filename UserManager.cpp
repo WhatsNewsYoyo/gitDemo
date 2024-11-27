@@ -32,6 +32,9 @@ void UserManager::addFriend(std::string username1, std::string username2) {
     if(user1 != nullptr && user2 != nullptr) {
         user1->friendNames.push_back(username2);
         user2->friendNames.push_back(username1);
+    } else{
+        std::cout << "one or both users are non_existent.\n";
+        return;
     }
 }
 
@@ -62,6 +65,10 @@ std::vector<std::string> UserManager::getFriendNames(std::string username) {
         return user->friendNames;
     }
     return std::vector<std::string>();
+}
+
+std::vector<User> UserManager::get_users_vector(){
+    return users;
 }
 
 
