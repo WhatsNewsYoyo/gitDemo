@@ -7,7 +7,6 @@
 #include <string>
 #include <map>
 
-
 using namespace std;
 
 class Grafo {
@@ -15,10 +14,11 @@ public:
     vector<vector<int>> Lista; 
     map<string, int> MapaNombres;
     vector<string> Nombres; 
+
     void agregarNodo(const string& nombre);
-    void agregarConexion(const string& a, const string& b); 
-    vector<string> bfs(const string& inicio); 
-    
+    void agregarConexion(const string& a, const string& b);
+    void eliminarConexion(const string& a, const string& b);
+    vector<string> bfs(const string& inicio);
 };
 
 #endif

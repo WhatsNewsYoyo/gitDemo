@@ -1,21 +1,17 @@
-#ifndef CATEGORY_MANAGER_H
-#define CATEGORY_MANAGER_H
+#ifndef CONTENT_MANAGER_H
+#define CONTENT_MANAGER_H
 
-#include <unordered_map>
-#include <vector>
 #include <string>
-using namespace std;
+#include <vector>
+#include <unordered_map>
 
-class CategoryManager {
+class ContentManager {
 private:
-    unordered_map<string, vector<string>> categorias; // Mapa de categorías y sus objetos
+    std::unordered_map<std::string, std::vector<std::string>> categoryContent;
 
 public:
-    // Método para agregar una nueva categoría
-    void addCategory(const string& categoria);
-
-    // Método para agregar un objeto a una categoría
-    void addObjectToCategory(const string& categoria, const string& object);
+    void addContent(const std::string& category, const std::string& content);
+    std::vector<std::string> getContentByCategory(const std::string& category) const;
 };
 
 #endif

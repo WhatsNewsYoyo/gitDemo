@@ -1,23 +1,20 @@
 #include "ContentManager.h"
 #include <iostream>
-using namespace std;
 
-// agregar una nueva categoría
-void CategoryManager::addCategory(const string& categoria) {
-    if (categorias.find(categoria) == categorias.end()) {
-        categorias[categoria] = {}; 
-        cout << "Categoría '" << categoria << "' agregada.\n";
-    } else {
-        cout << "La categoría '" << categoria << "' ya existe.\n";
+void ContentManager::addContent(const std::string& category, const std::string& content) {
+    //si no existe la categoria, la creamos
+    if (categoryContent.find(category) == categoryContent.end()) {
+        categoryContent[category] = std::vector<std::string>();
     }
+    categoryContent[category].push_back(content);
 }
 
-// agregar un objeto a una categoría
-void CategoryManager::addObjectToCategory(const string& categoria, const string& object) {
-    if (categorias.find(categoria) != categorias.end()) {
-        categorias[categoria].push_back(object);
-        cout << "Objeto '" << object << "' agregado a la categoría '" << categoria << "'.\n";
-    } else {
-        cout << "Error: La categoría '" << categoria << "' no existe.\n";
+std::vector<std::string> ContentManager::getContentByCategory(const std::string& category) const {
+    //si no existe la categoria, devolvemos un vector vacio
+    //si existe, devolvemos el contenido de la categoria
+    if (categoryContent.find(category) == categoryContent.end()) {
+        std::cout << "Error: Categoria no encontrada" << std::endl;
+        return std::vector<std::string>();
     }
+    return categoryContent.at(category);
 }
