@@ -24,8 +24,8 @@ public:
     std::vector<std::string> recommendContent(std::string user);
     void update_system();
     std::vector<std::vector<int>> _system;
-private:
     std::vector<user*> _users;
+private:
     std::vector<std::string> _contents;
 
     int find_by_name(std::string name);
@@ -66,7 +66,7 @@ void RecommendationSystem::addUser(std::string new_user){
 }
 
 void RecommendationSystem::addFriend(std::string the_user, std::string his_friend){
-    user* friend_ptr = _users[find_by_name(the_user)];
+    user* friend_ptr = _users[find_by_name(his_friend)];
     _users[find_by_name(the_user)]->friends.push_back(friend_ptr);
     update_system();
 }
@@ -90,14 +90,22 @@ int main(){
     RecommendationSystem a;
     a.addUser("danilo");
     a.addUser("juan");
+    a._users.back()->interests = {"comida", "canciones"};
     a.addUser("damian");
     a.addUser("lol");
     a.addFriend("danilo","juan");
-    
-    a.addFriend("juan","danilo");
-    a.addFriend("juan","damian");
+    a.addFriend("danilo","damian");
 
-    for(auto i: a.recommendContent("juan")){
+    for(auto i: a.recommendContent("danilo")){
         std::cout << i << "\n";
     }
+
+    for(auto i:a._system){
+        std::cout << "\n";
+        for(auto j:i){
+            std::cout << j << " ";
+        }
+    }
+
+    return 0;
 }
