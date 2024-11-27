@@ -3,7 +3,6 @@
 using namespace std;
 
 
-
 void Grafo::agregarNodo(const string& nombre) {
     if (MapaNombres.find(nombre) == MapaNombres.end()) { 
         MapaNombres[nombre] = Nombres.size(); 
@@ -13,7 +12,6 @@ void Grafo::agregarNodo(const string& nombre) {
 }
 
 void Grafo::agregarConexion(const string& a, const string& b) {
-
     agregarNodo(a);
     agregarNodo(b);
 
@@ -28,6 +26,7 @@ void Grafo::agregarConexion(const string& a, const string& b) {
 //Metodo BFS
 vector<string> Grafo::bfs(const string& inicio) {
     
+    //Para guardar los amigos
     vector<string> resultado;
     
     //Si no hay nada
@@ -36,20 +35,23 @@ vector<string> Grafo::bfs(const string& inicio) {
     }
 
     vector<bool> visitado(Nombres.size(), false);
-    queue<int> q;
+    queue<int> fila;
+
 
     int nodoInicio = MapaNombres[inicio]; 
-    q.push(nodoInicio);
+    fila.push(nodoInicio);
     visitado[nodoInicio] = true;
 
-    while (!q.empty()) {
-        int actual = q.front();
-        q.pop();
+    //Mientras exista la queue
+    while (!fila.empty()) {
+        int actual = fila.front();
+        //Quitar
+        fila.pop();
         resultado.push_back(Nombres[actual]);
 
         for (int vecino : Lista[actual]) {
             if (!visitado[vecino]) {
-                q.push(vecino);
+                fila.push(vecino);
                 visitado[vecino] = true;
             }
         }

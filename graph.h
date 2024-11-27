@@ -18,7 +18,7 @@ public:
     void agregarNodo(const string& nombre);
     void agregarConexion(const string& a, const string& b); 
     vector<string> bfs(const string& inicio); 
-
+    
 };
 
 #endif
