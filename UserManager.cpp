@@ -63,3 +63,30 @@ std::vector<std::string> UserManager::getFriendNames(std::string username) {
     }
     return std::vector<std::string>();
 }
+
+
+void UserManager::removeFriend(std::string username1, std::string username2) {
+    User* user1 = getUser(username1);
+    User* user2 = getUser(username2);
+    
+    if(user1 != nullptr && user2 != nullptr) {
+        auto& friends1 = user1->friendNames;
+        auto& friends2 = user2->friendNames;
+
+
+        // iterar por el vector de amigos de user1 y si encuentra a user2 lo elimina
+        for (auto it = friends1.begin(); it != friends1.end(); ++it) {
+            if (*it == username2) {
+                friends1.erase(it);
+                break;
+            }
+        }
+
+        for (auto it = friends2.begin(); it != friends2.end(); ++it) {
+            if (*it == username1) {
+                friends2.erase(it);
+                break;
+            }
+        }
+    }
+}
