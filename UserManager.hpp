@@ -1,4 +1,4 @@
-#ifndef USER_MANAGER_H
+ #ifndef USER_MANAGER_H
 #define USER_MANAGER_H
 
 #include <string>
@@ -23,6 +23,7 @@ private:
 
 public:
     // Funciones principales
+    void removeFriend(std::string username1, std::string username2);
     void addUser(std::string name);
     void addInterest(std::string username, std::string category, std::string interest);
     void addFriend(std::string username1, std::string username2);
