@@ -5,7 +5,6 @@ struct user
     std::string name;
     std::vector<user*> friends;
     std::vector<std::string> interests = {"cool_interest", "interest_2"};
-
 };
 
 int find_index(const std::vector<user*>& vec, user* element) {
@@ -91,7 +90,14 @@ int main(){
     RecommendationSystem a;
     a.addUser("danilo");
     a.addUser("juan");
+    a.addUser("damian");
+    a.addUser("lol");
     a.addFriend("danilo","juan");
+    
     a.addFriend("juan","danilo");
-    std::cout << a.recommendContent("juan")[0] << "\n";
+    a.addFriend("juan","damian");
+
+    for(auto i: a.recommendContent("juan")){
+        std::cout << i << "\n";
+    }
 }
