@@ -1,13 +1,11 @@
 #include <iostream>
+#include "ContentManager.h"
 using namespace std;
 
 void CrearAmisatad1() {
     cout << "Escriba el nombre de las 2 personas que quiera crear una amistad\n";
 }
 
-void AgregarContenido2() {
-    cout << "Escriba el nombre del contenido:\n";
-}
 
 void Agregarinteres3() {
     cout << "Añádale algún interés a cualquier usuario:\n";
@@ -23,6 +21,8 @@ void AgregarUsuario5() {
 
 int main() {
     int opcion;
+    CategoryManager manager;
+    string categoria, objeto;
 
     do {
         // Mostrar menú
@@ -40,7 +40,14 @@ int main() {
                 CrearAmisatad1();
                 break;
             case 2:
-                AgregarContenido2();
+                cout << "Ingrese una categoría: ";
+                getline(cin, categoria); // Leer la categoría
+                manager.addCategory(categoria);
+                cout << "Ingrese un objeto para agregar a la categoría '" << categoria << "': ";
+                getline(cin, objeto); // Leer el objeto
+                // Agregar el objeto a la categoría
+                manager.addObjectToCategory(categoria, objeto);
+                return 0;
                 break;
             case 3:
                 Agregarinteres3();
