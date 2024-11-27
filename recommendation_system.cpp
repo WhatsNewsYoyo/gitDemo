@@ -1,13 +1,7 @@
-#include <iostream>
+#include "recommendation_system.hpp"
 
-struct user
-{
-    std::string name;
-    std::vector<user*> friends;
-    std::vector<std::string> interests = {"cool_interest", "interest_2"};
-};
 
-int find_index(const std::vector<user*>& vec, user* element) {
+int find_index(const std::vector<User*>& vec, User* element) {
     auto it = std::find(vec.begin(), vec.end(), element);
     if (it != vec.end()) {
         return std::distance(vec.begin(), it);
@@ -15,22 +9,6 @@ int find_index(const std::vector<user*>& vec, user* element) {
     return -1;
 
 }
-
-class RecommendationSystem{
-public:
-    void addUser(std::string new_user);
-    void addContent();
-    void addFriend(std::string the_user, std::string his_friend);
-    std::vector<std::string> recommendContent(std::string user);
-    void update_system();
-    std::vector<std::vector<int>> _system;
-    std::vector<user*> _users;
-private:
-    std::vector<std::string> _contents;
-
-    int find_by_name(std::string name);
-
-};
 
 std::vector<std::string> RecommendationSystem::recommendContent(std::string user) {
     int user_index = find_by_name(user);
@@ -60,14 +38,12 @@ int RecommendationSystem::find_by_name(std::string name) {
 }
 
 void RecommendationSystem::addUser(std::string new_user){
-    _users.push_back(new user);
-    _users.back() -> name = new_user;
+    _users.push_back(new User(new_user));
     update_system();
 }
 
 void RecommendationSystem::addFriend(std::string the_user, std::string his_friend){
-    user* friend_ptr = _users[find_by_name(his_friend)];
-    _users[find_by_name(the_user)]->friends.push_back(friend_ptr);
+    _users[find_by_name(the_user)]->friendNames.push_back(his_friend);
     update_system();
 }
 
@@ -80,32 +56,8 @@ void RecommendationSystem::update_system(){
     _system = new_system;
 
     for(int i = 0; i < users_s; i++){
-        for(auto friendd : _users[i] -> friends){
-            _system[i][find_index(_users, friendd)] = 1;
+        for(auto friendd : _users[i] -> friendNames){
+            _system[i][find_by_name(friendd)] = 1;
         }
     }
-}
-
-int main(){
-    RecommendationSystem a;
-    a.addUser("danilo");
-    a.addUser("juan");
-    a._users.back()->interests = {"comida", "canciones"};
-    a.addUser("damian");
-    a.addUser("lol");
-    a.addFriend("danilo","juan");
-    a.addFriend("danilo","damian");
-
-    for(auto i: a.recommendContent("danilo")){
-        std::cout << i << "\n";
-    }
-
-    for(auto i:a._system){
-        std::cout << "\n";
-        for(auto j:i){
-            std::cout << j << " ";
-        }
-    }
-
-    return 0;
 }
