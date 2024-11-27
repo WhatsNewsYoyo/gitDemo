@@ -4,6 +4,7 @@ struct user
 {
     std::string name;
     std::vector<user*> friends;
+    std::vector<std::string> interests = {"cool_interest", "interest_2"};
 
 };
 
@@ -22,19 +23,34 @@ public:
     void addContent();
     void addFriend(std::string the_user, std::string his_friend);
     std::vector<std::string> recommendContent(std::string user);
+    void update_system();
+    std::vector<std::vector<int>> _system;
 private:
     std::vector<user*> _users;
     std::vector<std::string> _contents;
 
-    std::vector<std::vector<int>> _system;
-
-    void update_system();
     int find_by_name(std::string name);
 
 };
 
-int RecommendationSystem::recommendContent(std::string user) {
-    find_by_name[user];
+std::vector<std::string> RecommendationSystem::recommendContent(std::string user) {
+    int user_index = find_by_name(user);
+
+    if(user_index == -1){
+        std::cout << "user_not_found\n";
+        return {};
+    }
+
+    std::vector<std::string> final_interest_vec;
+
+    for(int i = 0; i < _system[user_index].size(); i++){
+        if (_system[user_index][i] != INT_MAX){
+            std::vector<std::string> this_interest_vector = _users[i] -> interests;
+            final_interest_vec.insert(final_interest_vec.end(), this_interest_vector.begin(), this_interest_vector.end());
+        }
+    }
+
+    return final_interest_vec;
 }
 
 int RecommendationSystem::find_by_name(std::string name) {
@@ -47,26 +63,35 @@ int RecommendationSystem::find_by_name(std::string name) {
 void RecommendationSystem::addUser(std::string new_user){
     _users.push_back(new user);
     _users.back() -> name = new_user;
+    update_system();
 }
 
 void RecommendationSystem::addFriend(std::string the_user, std::string his_friend){
     user* friend_ptr = _users[find_by_name(the_user)];
     _users[find_by_name(the_user)]->friends.push_back(friend_ptr);
+    update_system();
 }
 
 
 void RecommendationSystem::update_system(){
 
     int users_s = _users.size();
-    std::vector<std::vector<int>> new_system(users_s, std::vector<int>(users_s));
+    std::vector<std::vector<int>> new_system(users_s, std::vector<int>(users_s, INT_MAX));
+
+    _system = new_system;
 
     for(int i = 0; i < users_s; i++){
         for(auto friendd : _users[i] -> friends){
-            _system[i][find_index(_users, friendd)];
+            _system[i][find_index(_users, friendd)] = 1;
         }
     }
 }
 
 int main(){
-
+    RecommendationSystem a;
+    a.addUser("danilo");
+    a.addUser("juan");
+    a.addFriend("danilo","juan");
+    a.addFriend("juan","danilo");
+    std::cout << a.recommendContent("juan")[0] << "\n";
 }
