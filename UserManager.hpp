@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 struct User {
     std::string name;
@@ -33,6 +34,9 @@ public:
     std::vector<std::string> getInterests(std::string username);
     std::vector<std::vector<std::string>> getCategorizedInterests(std::string username);
     std::vector<std::string> getFriendNames(std::string username);
+
+    //added for it to interact with recommendation_system
+    std::vector<User> get_users_vector();
 };
 
 #endif
