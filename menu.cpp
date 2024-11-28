@@ -1,10 +1,11 @@
 #include <iostream>
 #include "ContentManager.h"
+#include "graph.h"
 #include "recommendation_system.hpp"
 
 using namespace std;
 
-void CrearAmisatad1(UserManager& users) {
+void CrearAmisatad1(RecommendationSystem& system) {
     cout << "Agregar amigos mutuos!\nAmigo 1: ";
     std::string input;
     cin >> input;
@@ -15,7 +16,7 @@ void CrearAmisatad1(UserManager& users) {
 
     std::cout << "\n";
     
-    users.addFriend(input, input2);
+    system.addFriend(input, input2);
 }
 
 void Agregarinteres3(UserManager& users) {
@@ -23,45 +24,41 @@ void Agregarinteres3(UserManager& users) {
     std::string input;
     std::cin >> input;
 
-    cout << "Categoría: ";
+    cout << "Interés: ";
     std::string input2;
     std::cin >> input2;
 
-    cout << "Interés: ";
-    std::string input3;
-    std::cin >> input3;
-
-    users.addInterest(input, input2, input3);
+    users.addInterest(input, input2);
 }
 
-void VerRecomendaciones4(RecommendationSystem& recommendations) {
+void VerRecomendaciones4(RecommendationSystem& system) {
     std::cout << "Recomendaciones de usuario: ";
     std::string input;
     std::cin >> input;
     std::cout << "\nRecomendaciones: \n";
 
-    recommendations.get_users_from_manager();
-    for(auto i: recommendations.recommendContent(input)){
+    for(auto i: system.recommendContent(input)){
         std::cout << i << "\n";
     }
 
     std::cout << "\n";
 }
 
-void AgregarUsuario5(UserManager& users) {
+void AgregarUsuario5(RecommendationSystem& system) {
     cout << "Escriba el nombre del usuario al que quiera añadir: \n";
 
     std::string input;
     cin >> input;
     
-    users.addUser(input);
+    system.addUser(input);
 }
 
 int main() {
     int opcion;
-    CategoryManager manager;
+    ContentManager manager;
     UserManager users;
-    RecommendationSystem recommendations(&users);
+    Grafo graph;
+    RecommendationSystem recommendations(&users, &graph, &manager);
     string categoria, objeto;
 
     do {
@@ -78,7 +75,7 @@ int main() {
 
         switch (opcion) {
             case 1:
-                CrearAmisatad1(users);
+                CrearAmisatad1(recommendations);
                 break;
             case 2:
                 cout << "Ingrese una categoría: ";
@@ -96,12 +93,12 @@ int main() {
                 VerRecomendaciones4(recommendations);
                 break;
             case 5:
-                AgregarUsuario5(users);
+                AgregarUsuario5(recommendations);
                 break;
             case 6:
                 std::cout << "\nUSUARIOS---------\n";
-                for(auto i: users.get_users_vector()){
-                    std::cout << i.name << "\n";
+                for(auto i: graph.Nombres){
+                    std::cout << i << "\n";
                 }
                 std::cout << "\n";
                 break;

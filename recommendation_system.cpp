@@ -1,53 +1,60 @@
 #include "recommendation_system.hpp"
 
-RecommendationSystem::RecommendationSystem(UserManager* my_user_manager):
-_my_user_manager(my_user_manager){
-    update_system();
+RecommendationSystem::RecommendationSystem(UserManager* my_user_manager, Grafo* my_graph, ContentManager* my_content_manager):
+_my_user_manager(my_user_manager), _my_content_manager(my_content_manager), _my_graph(my_graph){}
+
+std::string find_key_by_value(const std::map<std::string, int>& my_map, int value) {
+    for (const auto& [key, val] : my_map) {
+        if (val == value) {
+            return key;
+        }
+    }
+    return "";
+}
+
+bool RecommendationSystem::user_exists(std::string user){
+    if (_my_graph->MapaNombres.find(user) == _my_graph->MapaNombres.end()) {
+        return 0;
+    }
+    return 1;
 }
 
 std::vector<std::string> RecommendationSystem::recommendContent(std::string user) {
-    int user_index = find_by_name(user);
-
-    if(user_index == -1){
-        std::cout << "user_not_found\n";
-        return {};
+    if(!user_exists(user)){
+        std::cout << "user not found.\n";
+        return;
     }
-
-    std::vector<std::string> final_interest_vec;
-
-    for(int i = 0; i < _system[user_index].size(); i++){
-        if (_system[user_index][i] != INT_MAX){
-            std::vector<std::string> this_interest_vector = _users[i].interests;
-            final_interest_vec.insert(final_interest_vec.end(), this_interest_vector.begin(), this_interest_vector.end());
+    
+    std::vector<std::string> content_vec;
+    std::vector<std::string> connections = _my_graph->bfs(user);
+    for(auto friendd: connections){
+        std::vector<std::string> category = _my_user_manager -> getInterests(friendd);
+        for(auto interest: category){
+            std::vector<std::string> content_topic = _my_content_manager->getContentByCategory(interest);
+            content_vec.insert(content_vec.end(), content_topic.begin(), content_topic.end());
         }
     }
 
-    return final_interest_vec;
+    return content_vec;
 }
 
-int RecommendationSystem::find_by_name(std::string name) {
-    for (int i = 0; i < _users.size(); i++){
-        if(_users[i].name == name) return i;
+void RecommendationSystem::addUser(std::string user){
+    if(user_exists(user)){
+        std::cout << "can not create duplicate user.\n";
     }
-    return -1;
+    _my_graph->agregarNodo(user);
+    _my_user_manager->addUser(user);
 }
 
-void RecommendationSystem::get_users_from_manager(){
-    _users = _my_user_manager -> get_users_vector();
-    update_system();
+void RecommendationSystem::addContent(std::string category, std::string content){
+    _my_content_manager -> addContent(category, content);
 }
 
-
-void RecommendationSystem::update_system(){
-
-    int users_s = _users.size();
-    std::vector<std::vector<int>> new_system(users_s, std::vector<int>(users_s, INT_MAX));
-
-    _system = new_system;
-
-    for(int i = 0; i < users_s; i++){
-        for(auto friendd : _users[i].friendNames){
-            _system[i][find_by_name(friendd)] = 1;
-        }
+void RecommendationSystem::addFriend(std::string user, std::string friendd){
+    if(!user_exists(user) || !user_exists(friendd)){
+        std::cout << "one or both users are non_existent.\n";
+        return;
     }
+
+    _my_graph -> agregarConexion(user, friendd);
 }
