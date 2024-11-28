@@ -53,13 +53,38 @@ void AgregarUsuario5(RecommendationSystem& system) {
     system.addUser(input);
 }
 
+void CrearContenido(ContentManager& manager){
+    std::cout << "Ingrese una categoría: ";
+
+    std::string input;
+    cin >> input;
+
+    cout << "Ingrese el contenido: ";
+    std::string input2;
+    cin >> input2;
+
+    manager.addContent(input, input2);
+}
+
+void EliminarAmisatad(Grafo& graph){
+    cout << "Eliminar amistad :(\nNo_Amigo 1: ";
+    std::string input;
+    cin >> input;
+
+    cout << "No_Amigo 2: ";
+    std::string input2;
+    cin >> input2;
+
+    graph.eliminarConexion(input, input2);
+}
+
 int main() {
     int opcion;
     ContentManager manager;
     UserManager users;
     Grafo graph;
     RecommendationSystem recommendations(&users, &graph, &manager);
-    string categoria, objeto;
+    string categoria, contenido, objeto;
 
     do {
         // Mostrar menú
@@ -70,7 +95,8 @@ int main() {
         cout << "4. Ver recomendaciones\n";
         cout << "5. Agregar usuario\n";
         cout << "6. Lista de usuarios\n";
-        cout << "7. Salir \nInput: ";
+        cout << "7. Eliminar amistad\n";
+        cout << "8. Salir \nInput: ";
         cin >> opcion;
 
         switch (opcion) {
@@ -78,13 +104,7 @@ int main() {
                 CrearAmisatad1(recommendations);
                 break;
             case 2:
-                cout << "Ingrese una categoría: ";
-                getline(cin, categoria); // Leer la categoría
-                manager.addCategory(categoria);
-                cout << "Ingrese un objeto para agregar a la categoría '" << categoria << "': ";
-                getline(cin, objeto); // Leer el objeto
-                // Agregar el objeto a la categoría
-                manager.addObjectToCategory(categoria, objeto);
+                CrearContenido(manager);
                 break;
             case 3:
                 Agregarinteres3(users);
@@ -102,7 +122,11 @@ int main() {
                 }
                 std::cout << "\n";
                 break;
+
             case 7:
+                EliminarAmisatad(graph);
+                break;
+            case 8:
                 cout << "Saliendo del programa.\n";
                 break;
             default:
@@ -111,7 +135,7 @@ int main() {
         }
 
         cout << endl; // Separador para mejor visualización
-    } while (opcion != 7);
+    } while (opcion != 8);
 
     return 0;
 }
