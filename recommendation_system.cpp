@@ -3,15 +3,6 @@
 RecommendationSystem::RecommendationSystem(UserManager* my_user_manager, Grafo* my_graph, ContentManager* my_content_manager):
 _my_user_manager(my_user_manager), _my_content_manager(my_content_manager), _my_graph(my_graph){}
 
-std::string find_key_by_value(const std::map<std::string, int>& my_map, int value) {
-    for (const auto& [key, val] : my_map) {
-        if (val == value) {
-            return key;
-        }
-    }
-    return "";
-}
-
 bool RecommendationSystem::user_exists(std::string user){
     if (_my_graph->MapaNombres.find(user) == _my_graph->MapaNombres.end()) {
         return 0;
@@ -22,7 +13,7 @@ bool RecommendationSystem::user_exists(std::string user){
 std::vector<std::string> RecommendationSystem::recommendContent(std::string user) {
     if(!user_exists(user)){
         std::cout << "user not found.\n";
-        return;
+        return {};
     }
     
     std::vector<std::string> content_vec;
@@ -44,10 +35,13 @@ void RecommendationSystem::addUser(std::string user){
     }
     _my_graph->agregarNodo(user);
     _my_user_manager->addUser(user);
+
+    std::cout << "Nuevo usuario - " << user << "!\n";
 }
 
 void RecommendationSystem::addContent(std::string category, std::string content){
     _my_content_manager -> addContent(category, content);
+    std::cout << "Se agrego nuevo contenido a la categoria - " << category << "!\n";
 }
 
 void RecommendationSystem::addFriend(std::string user, std::string friendd){
@@ -57,4 +51,5 @@ void RecommendationSystem::addFriend(std::string user, std::string friendd){
     }
 
     _my_graph -> agregarConexion(user, friendd);
+    std::cout << "se creo la amistad entre " << user << " y " << friendd << "!\n";
 }
